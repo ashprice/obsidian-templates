@@ -100,6 +100,12 @@ function citationString(citekey) {
     return titleString;
   }
 
+  function containerString(citekey) {
+    let data = app.plugins.plugins['obsidian-citation-plugin'].library.entries[citekey].data;
+    let containerString = data.containerTitle;
+    return containerString;
+  }
+
   function publisherString(citekey) {
     let data = app.plugins.plugins['obsidian-citation-plugin'].library.entries[citekey].data;
     let publisherString = data.fields.publisher;
@@ -125,12 +131,16 @@ function citationString(citekey) {
   let title = titleString(citekey);
   let publisher = publisherString(citekey);
   let page = pageString(citekey);
+  let container = containerString(citekey);
 
   let citationString = "";
   if (authorString) {
     citationString = `${authorString} (${year}). ${title}`;
   } else if (editorString) {
     citationString = `${editorString} (ed., ${year}). ${title}`;
+  }
+  if (container) {
+    citationString += `. In: ${editorString} (ed., ${year}), ${container}`;
   }
   if (page) {
     const rangeRegex = /^\d+[-–—]\d+$/;
