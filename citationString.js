@@ -97,13 +97,12 @@ function citationString(citekey) {
   }
 
   function containerString(citekey) {
-    let containerString = [];
     if (data.fields.booktitle) {
       containerString = data.fields.booktitle;
     } else if (data.fields.journaltitle) {
       containerString = data.fields.journaltitle;
     } else {
-      containerString = null;
+      containerString = "";
     }
     return containerString;
   }
