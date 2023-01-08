@@ -1,14 +1,13 @@
 function citationString(citekey) {
+  let data = app.plugins.plugins['obsidian-citation-plugin'].library.entries[citekey].data;
 
   function yearString(citekey) {
-    let data = app.plugins.plugins['obsidian-citation-plugin'].library.entries[citekey].data;
     let yearString = data.fields.date[0].split("-")[0];
     return yearString
   }
 
   function authorsString(citekey) {
     let fullAuthorList = [];
-    let data = app.plugins.plugins['obsidian-citation-plugin'].library.entries[citekey].data;
     let authors = [];
     if (data.creators.author)
       authors = data.creators.author;
@@ -61,7 +60,6 @@ function citationString(citekey) {
 
   function editorsString(citekey) {
     let fullEditorList = [];
-    let data = app.plugins.plugins['obsidian-citation-plugin'].library.entries[citekey].data;
     let editors = [];
     if (data.creators.editor)
       editors = data.creators.editor;
@@ -79,7 +77,6 @@ function citationString(citekey) {
       fullEditorList.push(str.join(""));
     });
     const editorString = joinEditors(fullEditorList);
-    return replaceIllegalFileNameCharactersInString(editorString);
   }
 
   function joinEditors(fullEditorList) {
@@ -95,30 +92,30 @@ function citationString(citekey) {
   }
 
   function titleString(citekey) {
-    let data = app.plugins.plugins['obsidian-citation-plugin'].library.entries[citekey].data;
     let titleString = data.fields.title;
     return titleString;
   }
 
   function containerString(citekey) {
-    let data = app.plugins.plugins['obsidian-citation-plugin'].library.entries[citekey].data;
-    let containerString = data.containerTitle;
+    let containerString = [];
+    if (data.fields.booktitle) {
+      containerString = data.fields.booktitle;
+    } else if (data.fields.journaltitle) {
+      containerString = data.fields.journaltitle;
+    }
     return containerString;
   }
 
   function publisherString(citekey) {
-    let data = app.plugins.plugins['obsidian-citation-plugin'].library.entries[citekey].data;
     let publisherString = data.fields.publisher;
     return publisherString;
   }
 
   function pageString(citekey) {
-    let data = app.plugins.plugins['obsidian-citation-plugin'].library.entries[citekey].data;
     let pageString = data.fields.pages;
     return pageString;
   }
 
-  let data = app.plugins.plugins['obsidian-citation-plugin'].library.entries[citekey].data;
   let authorString = "";
   let editorString = "";
   if (data.creators.author) {
@@ -135,9 +132,9 @@ function citationString(citekey) {
 
   let citationString = "";
   if (authorString) {
-    citationString = `${authorString} (${year}). ${title}`;
+    citationString = `${authorString} (${year}). *${title}*`;
   } else if (editorString) {
-    citationString = `${editorString} (ed., ${year}). ${title}`;
+    citationString = `${editorString} (ed., ${year}). *${title}*`;
   }
   if (container) {
     citationString += `. In: ${editorString} (ed., ${year}), ${container}`;
