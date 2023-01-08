@@ -102,6 +102,8 @@ function citationString(citekey) {
       containerString = data.fields.booktitle;
     } else if (data.fields.journaltitle) {
       containerString = data.fields.journaltitle;
+    } else {
+      containerString = null;
     }
     return containerString;
   }
