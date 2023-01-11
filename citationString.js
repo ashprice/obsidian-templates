@@ -38,7 +38,6 @@ function citationString(citekey) {
       return fullAuthorList[0] + " et al.";
   }
 
-
   function findFirstLast(author) {
     let lastNamesString = "";
     let firstNamesArray = [];
@@ -77,6 +76,7 @@ function citationString(citekey) {
       fullEditorList.push(str.join(""));
     });
     const editorString = joinEditors(fullEditorList);
+    return replaceIllegalFileNameCharactersInString(editorString);
   }
 
   function joinEditors(fullEditorList) {
@@ -89,6 +89,21 @@ function citationString(citekey) {
       return fullEditorList.slice(0, -1).join("\, ") + `\, and ${fullEditorList[len - 1]}`;
     else if (len >= 5)
       return fullEditorList[0] + " et al.";
+  }
+
+  function findFirstLast(editor) {
+    let lastNamesString = "";
+    let firstNamesArray = [];
+    if (editor.lastName) {
+      firstNamesArray = editor.firstName.split(" ");
+      lastNamesString = editor.lastName;
+    }
+    else {
+      let parts = editor.literal.split(" ");
+      firstNamesArray = parts.slice(0,parts.length-1);
+      lastNamesString = parts[parts.length-1];
+    }
+    return [firstNamesArray, lastNamesString];
   }
 
   function titleString(citekey) {
